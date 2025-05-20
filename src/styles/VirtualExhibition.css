@@ -1,0 +1,115 @@
+.exhibition-container {
+  padding: 40px;
+  background-color: #f9f9f9;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.exhibition-header {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.exhibition-header h1 {
+  font-size: 2rem;
+  color: #1e1e1e;
+}
+
+.exhibition-header p {
+  color: #555;
+  font-size: 1rem;
+}
+
+.exhibition-filter {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 30px;
+}
+
+.exhibition-btn {
+  padding: 10px 18px;
+  border: none;
+  border-radius: 20px;
+  background-color: #e8ecf1;
+  color: #333;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.exhibition-btn.active {
+  background-color: #1e2a3a;
+  color: white;
+}
+
+.exhibition-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 25px;
+}
+
+.exhibition-card {
+  background-color: white;
+  border-radius: 16px;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+  overflow: hidden;
+  transition: transform 0.3s;
+}
+
+.exhibition-card:hover {
+  transform: translateY(-4px);
+}
+
+.exhibition-image {
+  position: relative;
+}
+
+.exhibition-image img {
+  width: 100%;
+  height: 200px;
+  object-fit: cover;
+}
+
+.exhibition-artworks {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  background-color: #f56565;
+  color: white;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 0.85rem;
+}
+
+.exhibition-info {
+  padding: 20px;
+  text-align: left;
+}
+
+.exhibition-info h3 {
+  margin: 0 0 10px;
+  color: #1e1e1e;
+}
+
+.exhibition-info p {
+  font-size: 0.95rem;
+  color: #666;
+  margin-bottom: 15px;
+}
+
+.view-exhibition-btn {
+  border: 1.5px solid #1e2a3a;
+  background-color: transparent;
+  padding: 8px 18px;
+  border-radius: 25px;
+  color: #1e2a3a;
+  font-weight: 500;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.view-exhibition-btn:hover {
+  background-color: #1e2a3a;
+  color: white;
+}

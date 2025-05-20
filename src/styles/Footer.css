@@ -1,0 +1,199 @@
+/* Footer.css - Stylish footer for MUSEUMIX */
+
+.footer {
+  background-color: #1a252f;
+  color: white;
+  padding: 4rem 0 1.5rem;
+  font-family: 'Raleway', sans-serif;
+}
+
+.footer-container {
+  width: 90%;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.footer-content {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 3rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.footer-logo {
+  font-family: 'Playfair Display', serif;
+  font-weight: 700;
+  font-size: 1.8rem;
+  margin-bottom: 1rem;
+  color: #fff;
+}
+
+.footer-description {
+  color: rgba(255, 255, 255, 0.7);
+  margin-bottom: 1.5rem;
+  line-height: 1.6;
+  font-size: 0.95rem;
+}
+
+.social-icons {
+  display: flex;
+  gap: 1rem;
+  margin-top: 0.5rem;
+}
+
+.social-icons a {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.social-icons a:hover {
+  background-color: #e74c3c;
+  transform: translateY(-3px);
+}
+
+.footer-heading {
+  font-size: 1.3rem;
+  margin-bottom: 1.5rem;
+  position: relative;
+  padding-bottom: 0.8rem;
+  color: #fff;
+  font-family: 'Playfair Display', serif;
+}
+
+.footer-heading::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  width: 50px;
+  height: 2px;
+  background-color: #e74c3c;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-link {
+  margin-bottom: 0.8rem;
+}
+
+.footer-link a {
+  color: rgba(255, 255, 255, 0.7);
+  text-decoration: none;
+  transition: all 0.3s ease;
+  font-size: 0.95rem;
+  position: relative;
+  padding-left: 0;
+}
+
+.footer-link a::before {
+  content: '→';
+  position: absolute;
+  left: -15px;
+  opacity: 0;
+  transition: all 0.3s ease;
+}
+
+.footer-link a:hover {
+  color: #e74c3c;
+  padding-left: 15px;
+}
+
+.footer-link a:hover::before {
+  opacity: 1;
+  left: 0;
+}
+
+.subscribe-form {
+  display: flex;
+  margin-top: 1rem;
+  position: relative;
+}
+
+.subscribe-input {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  border: none;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  border-radius: 4px;
+  font-family: 'Raleway', sans-serif;
+}
+
+.subscribe-input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.subscribe-input:focus {
+  outline: none;
+  box-shadow: 0 0 0 2px rgba(231, 76, 60, 0.5);
+}
+
+.subscribe-btn {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  height: 35px;
+  width: 35px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.subscribe-btn:hover {
+  background-color: #c0392b;
+}
+
+.footer-divider {
+  height: 1px;
+  background-color: rgba(255, 255, 255, 0.1);
+  margin: 1.5rem 0;
+}
+
+.footer-bottom {
+  text-align: center;
+  color: rgba(255, 255, 255, 0.5);
+  font-size: 0.9rem;
+  padding-top: 1rem;
+}
+
+/* Responsive Design */
+@media screen and (max-width: 768px) {
+  .footer {
+    padding: 3rem 0 1rem;
+  }
+  
+  .footer-content {
+    gap: 2rem;
+  }
+  
+  .footer-section {
+    margin-bottom: 1rem;
+  }
+}
+
+@media screen and (max-width: 480px) {
+  .footer-content {
+    grid-template-columns: 1fr;
+  }
+}

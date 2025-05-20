@@ -1,0 +1,325 @@
+/* FAQ.css - Styling for the MUSEUMIX FAQ page */
+
+/* General Page Styles */
+.faq-page {
+  font-family: 'Inter', sans-serif;
+  color: #333;
+  line-height: 1.6;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+/* Hero Section */
+.faq-hero {
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)), 
+              url('../assets/europeana-5TK1F5VfdIk-unsplash.jpg') no-repeat center center;
+  background-size: cover;
+  padding: 5rem 0;
+  text-align: center;
+  color: white;
+  margin-bottom: 3rem;
+}
+
+.page-title {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.page-subtitle {
+  font-size: 1.2rem;
+  max-width: 700px;
+  margin: 0 auto 2.5rem;
+  opacity: 0.9;
+}
+
+/* Search Bar */
+.faq-search {
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.search-input-container {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background-color: white;
+  border-radius: 50px;
+  padding: 0.5rem 1.5rem;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.search-icon {
+  color: #1e88e5;
+  margin-right: 10px;
+}
+
+.search-input {
+  border: none;
+  background: transparent;
+  flex-grow: 1;
+  padding: 0.8rem 0;
+  font-size: 1rem;
+  outline: none;
+}
+
+.search-input::placeholder {
+  color: #aaa;
+}
+
+/* FAQ Content Section */
+.faq-content {
+  padding: 0 0 5rem 0;
+}
+
+.faq-category {
+  margin-bottom: 3rem;
+}
+
+.category-title {
+  font-size: 1.8rem;
+  margin-bottom: 1.5rem;
+  color: #333;
+  position: relative;
+  padding-bottom: 0.8rem;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+.faq-items {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.faq-item {
+  background-color: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 3px 10px rgba(0, 0, 0, 0.05);
+  transition: box-shadow 0.3s ease;
+}
+
+.faq-item:hover {
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+}
+
+.faq-question {
+  padding: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.faq-question h3 {
+  font-size: 1.1rem;
+  margin: 0;
+  font-weight: 500;
+  color: #333;
+}
+
+.faq-question.active {
+  background-color: #f9f9f9;
+}
+
+.toggle-icon {
+  color: #1e88e5;
+  font-size: 0.9rem;
+  transition: transform 0.3s ease;
+}
+
+.faq-question.active .toggle-icon {
+  transform: rotate(180deg);
+}
+
+.faq-answer {
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height 0.3s ease, padding 0.3s ease;
+  background-color: #f9f9f9;
+}
+
+.faq-answer.expanded {
+  max-height: 500px;
+  padding: 0 1.5rem 1.5rem;
+}
+
+.faq-answer p {
+  margin: 0;
+  color: #555;
+  font-size: 1rem;
+}
+
+/* No Results Styling */
+.no-results-container {
+  text-align: center;
+  padding: 4rem 1rem;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  margin: 2rem 0;
+}
+
+.no-results-icon {
+  font-size: 3rem;
+  color: #ccc;
+  margin-bottom: 1.5rem;
+}
+
+.no-results {
+  font-size: 1.2rem;
+  margin-bottom: 0.5rem;
+  color: #666;
+}
+
+.try-again {
+  color: #888;
+  margin-bottom: 1.5rem;
+}
+
+.clear-search {
+  background-color: #1e88e5;
+  color: white;
+  border: none;
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.clear-search:hover {
+  background-color: #1976d2;
+}
+
+/* Still Need Help Section */
+.need-help {
+  background-color: #f0f7ff;
+  padding: 4rem 0;
+  text-align: center;
+}
+
+.help-content {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.help-content h2 {
+  font-size: 2rem;
+  margin-bottom: 1rem;
+  color: #333;
+}
+
+.help-content p {
+  font-size: 1.1rem;
+  color: #666;
+  margin-bottom: 2rem;
+}
+
+.help-buttons {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.8rem 2rem;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: all 0.3s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background-color: #1e88e5;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #1976d2;
+}
+
+.btn-secondary {
+  background-color: transparent;
+  color: #1e88e5;
+  border: 2px solid #1e88e5;
+}
+
+.btn-secondary:hover {
+  background-color: rgba(30, 136, 229, 0.1);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+  .page-title {
+    font-size: 2.5rem;
+  }
+}
+
+@media (max-width: 768px) {
+  .faq-hero {
+    padding: 4rem 0;
+  }
+  
+  .page-title {
+    font-size: 2rem;
+  }
+  
+  .page-subtitle {
+    font-size: 1rem;
+  }
+  
+  .category-title {
+    font-size: 1.5rem;
+  }
+  
+  .faq-question h3 {
+    font-size: 1rem;
+  }
+  
+  .help-content h2 {
+    font-size: 1.8rem;
+  }
+  
+  .help-content p {
+    font-size: 1rem;
+  }
+  
+  .help-buttons {
+    flex-direction: column;
+    align-items: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .faq-hero {
+    padding: 3rem 0;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
+  .search-input-container {
+    padding: 0.3rem 1rem;
+  }
+  
+  .search-input {
+    padding: 0.6rem 0;
+  }
+  
+  .faq-question {
+    padding: 1rem;
+  }
+  
+  .faq-answer.expanded {
+    padding: 0 1rem 1rem;
+  }
+}

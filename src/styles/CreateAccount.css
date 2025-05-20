@@ -1,0 +1,111 @@
+/* CreateAccount.css */
+
+.create-account-page {
+  position: relative;
+  width: 100%;
+  min-height: 100vh;
+  background-image: url('../assets/europeana-5TK1F5VfdIk-unsplash.jpg'); /* Replace with your actual background image path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  margin: 0;
+  padding: 0;
+}
+
+.account-background-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  min-height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Dark overlay for better readability */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
+
+.create-account-container {
+  background-color: rgba(255, 255, 255, 0.9);
+  border-radius: 8px;
+  padding: 30px;
+  width: 100%;
+  max-width: 500px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.account-title {
+  color: #2c3e50;
+  text-align: center;
+  font-size: 24px;
+  margin-bottom: 30px;
+}
+
+.account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.form-row {
+  display: flex;
+  gap: 15px;
+}
+
+.form-group {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.form-group label {
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: #2c3e50;
+}
+
+.form-input {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 16px;
+  background-color: white;
+}
+
+.account-button {
+  width: 100%;
+  max-width: 450px;
+  padding: 0.75rem 1.5rem;           /* Balanced vertical & horizontal padding */
+  background-color: #e74c3c;
+  color: white;
+  border: none;
+  border-radius: 300px;                /* Less pill-like, more elegant */
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 600;
+  margin: 10px auto 0 auto;          /* Center the button */
+  display: block;                   /* Ensures centering works */
+  width: fit-content;               /* Prevents button from stretching */
+  transition: background-color 0.3s ease;
+}
+
+.account-button:hover {
+  background-color: #c0392b;
+}
+
+.login-link {
+  text-align: center;
+  margin-top: 20px;
+  color: #2c3e50;
+}
+
+.login-text {
+  color: #e74c3c;
+  cursor: pointer;
+  text-decoration: underline;
+}
+
+.login-text:hover {
+  color: #c0392b;
+}
+
