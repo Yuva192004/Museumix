@@ -1,8 +1,8 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import axios from 'axios';
 import '../styles/ArtworkUpload.css';
 
-const ArtworkUpload = () => {
+const ArtworkUpload = ({ onUploadSuccess }) => {
   const [title, setTitle] = useState('');
   const [artist, setArtist] = useState('');
   const [year, setYear] = useState('');
@@ -18,19 +18,21 @@ const ArtworkUpload = () => {
   const fileInputRef = useRef(null);
 
   // Fetch galleries for dropdown selection
-  React.useEffect(() => {
-    axios.get('http://localhost:5000/api/galleries')
-      .then(response => {
+  useEffect(() => {
+    const fetchGalleries = async () => {
+      try {
+        const response = await axios.get('http://localhost:5000/api/galleries');
         setGalleries(response.data);
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error fetching galleries:', error);
-      });
+      }
+    };
+    fetchGalleries();
   }, []);
 
   const handleFileChange = (e) => {
     const selectedFile = e.target.files[0];
-    if (selectedFile) {
+    if (selectedFile && selectedFile.type.startsWith('image/')) {
       setImage(selectedFile);
       
       // Create preview URL for the selected image
@@ -39,6 +41,11 @@ const ArtworkUpload = () => {
         setPreviewUrl(reader.result);
       };
       reader.readAsDataURL(selectedFile);
+    } else {
+      setSubmitStatus({
+        type: 'error',
+        message: 'Please select a valid image file (JPG, PNG, GIF)'
+      });
     }
   };
 
@@ -61,14 +68,21 @@ const ArtworkUpload = () => {
     
     if (e.dataTransfer.files && e.dataTransfer.files[0]) {
       const droppedFile = e.dataTransfer.files[0];
-      setImage(droppedFile);
-      
-      // Create preview URL for the dropped image
-      const reader = new FileReader();
-      reader.onload = () => {
-        setPreviewUrl(reader.result);
-      };
-      reader.readAsDataURL(droppedFile);
+      if (droppedFile.type.startsWith('image/')) {
+        setImage(droppedFile);
+        
+        // Create preview URL for the dropped image
+        const reader = new FileReader();
+        reader.onload = () => {
+          setPreviewUrl(reader.result);
+        };
+        reader.readAsDataURL(droppedFile);
+      } else {
+        setSubmitStatus({
+          type: 'error',
+          message: 'Please drop a valid image file (JPG, PNG, GIF)'
+        });
+      }
     }
   };
 
@@ -105,21 +119,15 @@ const ArtworkUpload = () => {
     formData.append('year', year);
     formData.append('medium', medium);
     formData.append('description', description);
-    formData.append('galleryId', galleryId);
-    
-    // Process tags into array if provided
-    if (tags) {
-      const tagsArray = tags.split(',').map(tag => tag.trim());
-      tagsArray.forEach((tag, index) => {
-        formData.append(`tags[${index}]`, tag);
-      });
-    }
-    
+    if (galleryId) formData.append('galleryId', galleryId);
+    if (tags) formData.append('tags', tags);
     formData.append('image', image);
 
     try {
       const response = await axios.post('http://localhost:5000/api/artworks', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
       
       setSubmitStatus({
@@ -141,13 +149,19 @@ const ArtworkUpload = () => {
         fileInputRef.current.value = '';
       }
       
-      console.log(response.data);
+      // Call the callback if provided
+      if (onUploadSuccess) {
+        onUploadSuccess(response.data);
+      }
+      
     } catch (error) {
+      console.error('Upload error:', error);
       setSubmitStatus({
         type: 'error',
-        message: error.response?.data?.message || 'Error uploading artwork. Please try again.'
+        message: error.response?.data?.message || 
+               error.message || 
+               'Error uploading artwork. Please try again.'
       });
-      console.error('Error uploading artwork:', error);
     } finally {
       setIsSubmitting(false);
     }

@@ -14,6 +14,10 @@ const CreateAccount = () => {
   });
 
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
+
+  // Backend URL - change this to match your backend port
+  const API_BASE_URL = 'http://localhost:3000';
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -26,30 +30,78 @@ const CreateAccount = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
+    setError('');
 
+    // Client-side validation
     if (formData.password !== formData.confirmPassword) {
       setError('Passwords do not match');
+      setLoading(false);
       return;
     }
 
     if (formData.password.length < 6) {
       setError('Password must be at least 6 characters long');
+      setLoading(false);
+      return;
+    }
+
+    // Check for empty fields
+    if (!formData.firstName.trim() || !formData.lastName.trim() || !formData.email.trim()) {
+      setError('Please fill in all required fields');
+      setLoading(false);
       return;
     }
 
     try {
-      const res = await axios.post('http://localhost:8000/api/auth/register', {
+      console.log('Attempting to register with:', {
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        email: formData.email,
+        // Don't log password
+      });
+
+      const res = await axios.post(`${API_BASE_URL}/api/auth/register`, {
         firstName: formData.firstName,
         lastName: formData.lastName,
         email: formData.email,
         password: formData.password
       });
 
+      console.log('Registration successful:', res.data);
+      
+      // Store token if you want to auto-login the user
+      if (res.data.token) {
+        localStorage.setItem('token', res.data.token);
+        localStorage.setItem('user', JSON.stringify(res.data.user));
+      }
+
       alert(res.data.msg || 'Account created successfully! Please log in.');
       navigate('/login');
+      
     } catch (err) {
-      const msg = err.response?.data?.msg || 'Account creation failed.';
-      setError(msg);
+      console.error('Registration error:', err);
+      
+      let errorMessage = 'Account creation failed.';
+      
+      if (err.response) {
+        // Server responded with error status
+        errorMessage = err.response.data?.msg || 
+                      `Server error: ${err.response.status} ${err.response.statusText}`;
+        console.error('Server error response:', err.response.data);
+      } else if (err.request) {
+        // Request was made but no response received
+        errorMessage = 'Unable to connect to server. Please check if the backend is running.';
+        console.error('Network error:', err.request);
+      } else {
+        // Something else happened
+        errorMessage = err.message;
+        console.error('Error:', err.message);
+      }
+      
+      setError(errorMessage);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -73,6 +125,7 @@ const CreateAccount = () => {
                   onChange={handleChange}
                   required
                   className="form-input"
+                  disabled={loading}
                 />
               </div>
 
@@ -86,6 +139,7 @@ const CreateAccount = () => {
                   onChange={handleChange}
                   required
                   className="form-input"
+                  disabled={loading}
                 />
               </div>
             </div>
@@ -100,6 +154,7 @@ const CreateAccount = () => {
                 onChange={handleChange}
                 required
                 className="form-input"
+                disabled={loading}
               />
             </div>
 
@@ -114,6 +169,7 @@ const CreateAccount = () => {
                 required
                 className="form-input"
                 placeholder="Minimum 6 characters"
+                disabled={loading}
               />
             </div>
 
@@ -127,14 +183,16 @@ const CreateAccount = () => {
                 onChange={handleChange}
                 required
                 className="form-input"
+                disabled={loading}
               />
             </div>
 
             <button 
               type="submit" 
               className="btn btn-primary account-button"
+              disabled={loading}
             >
-              CREATE ACCOUNT
+              {loading ? 'CREATING ACCOUNT...' : 'CREATE ACCOUNT'}
             </button>
           </form>
 

@@ -19,7 +19,7 @@ import Footer from './components/Footer';
 import Sidebar from './components/SideBar';
 
 
-// Protected route component to check if user is logged in
+
 const ProtectedRoute = ({ children }) => {
   const isLoggedIn = localStorage.getItem('isLoggedIn') === 'true';
   
@@ -54,18 +54,18 @@ const App = () => {
               <Route 
               path="/gallery" 
               element={
-                <ProtectedRoute>
+           <ProtectedRoute>
                   <Gallery />
-                </ProtectedRoute>
+            </ProtectedRoute>
               } 
             />
             
             <Route 
               path="/upload" 
               element={
-                <ProtectedRoute>
+            <ProtectedRoute>
                   <ArtworkUpload />
-                </ProtectedRoute>
+              </ProtectedRoute>
               } 
             />
 

@@ -8,22 +8,28 @@ const Gallery = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [filter, setFilter] = useState('');
-  const [viewMode, setViewMode] = useState('grid'); // 'grid' or 'list'
+  const [viewMode, setViewMode] = useState('grid');
+  const [imageErrors, setImageErrors] = useState({});
+
+  const API_BASE_URL = process.env.REACT_APP_API_BASE_URL || 'http://localhost:5000';
 
   useEffect(() => {
-    // Fetch galleries from backend
-    setLoading(true);
-    axios.get('http://localhost:5000/api/galleries')
-      .then(response => {
-        setGalleries(response.data);
-        setLoading(false);
-      })
-      .catch(error => {
-        console.error('Error fetching galleries:', error);
+    const fetchGalleries = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API_BASE_URL}/api/galleries`);
+        const data = Array.isArray(response.data) ? response.data : (response.data.data || []);
+        setGalleries(data);
+      } catch (err) {
+        console.error('Error fetching galleries:', err);
         setError('Failed to load galleries. Please try again later.');
+      } finally {
         setLoading(false);
-      });
-  }, []);
+      }
+    };
+
+    fetchGalleries();
+  }, [API_BASE_URL]);
 
   const handleGalleryClick = (gallery) => {
     setSelectedGallery(gallery);
@@ -31,48 +37,83 @@ const Gallery = () => {
 
   const handleBackClick = () => {
     setSelectedGallery(null);
+    setImageErrors({});
+  };
+
+  const handleImageError = (url, key) => {
+    console.error(`Image load failed for URL: ${url}`);
+    setImageErrors(prev => ({ ...prev, [key]: true }));
+  };
+
+  const getImageUrl = (path) => {
+    if (!path) return '/placeholder-image.jpg';
+    
+    // Check if path is already a complete URL
+    if (path.startsWith('http')) return path;
+    
+    // Handle cases where path might already have a leading slash
+    const normalizedPath = path.startsWith('/') ? path : `/${path}`;
+    
+    // Check if the path is already complete with the base URL
+    if (normalizedPath.includes(API_BASE_URL)) return normalizedPath;
+    
+    return `${API_BASE_URL}${normalizedPath}`;
   };
 
   const filteredGalleries = galleries.filter(gallery => 
-    gallery.name.toLowerCase().includes(filter.toLowerCase()) || 
-    gallery.description.toLowerCase().includes(filter.toLowerCase())
+    gallery?.name?.toLowerCase().includes(filter.toLowerCase()) || 
+    gallery?.description?.toLowerCase().includes(filter.toLowerCase())
   );
 
-  // Gallery Detail View
   if (selectedGallery) {
     return (
       <div className="gallery-detail">
         <button className="back-button" onClick={handleBackClick}>
-          <span>←</span> Back to Galleries
+          ← Back to Galleries
         </button>
         
         <div className="gallery-header">
           <h2>{selectedGallery.name}</h2>
           <p className="gallery-description">{selectedGallery.description}</p>
           {selectedGallery.curator && (
-            <p className="gallery-curator">Curated by: {selectedGallery.curator}</p>
+            <p className="gallery-curator">
+              Curated by: {selectedGallery.curator.firstName} {selectedGallery.curator.lastName}
+            </p>
           )}
         </div>
         
         <div className="artwork-grid">
-          {selectedGallery.artworks && selectedGallery.artworks.map((artwork, index) => (
-            <div key={index} className="artwork-card">
-              <div className="artwork-image-container">
-                <img 
-                  src={artwork.imageUrl || 'https://via.placeholder.com/300x200?text=Artwork'} 
-                  alt={artwork.title}
-                  className="artwork-image"
-                />
+          {selectedGallery.artworks?.map((artwork) => {
+            const imageUrl = getImageUrl(artwork.imageUrl);
+            const imageKey = `artwork-${artwork._id}`;
+
+            return (
+              <div key={artwork._id} className="artwork-card">
+                <div className="artwork-image-container">
+                  {!imageErrors[imageKey] ? (
+                    <img 
+                      src={imageUrl}
+                      alt={`${artwork.title} by ${artwork.artist}`}
+                      onError={() => handleImageError(imageUrl, imageKey)}
+                      crossOrigin="anonymous"
+                    />
+                  ) : (
+                    <div className="image-placeholder">
+                      <div className="placeholder-icon">🖼️</div>
+                      <p>{artwork.title}</p>
+                    </div>
+                  )}
+                </div>
+                <div className="artwork-info">
+                  <h3>{artwork.title}</h3>
+                  <p className="artwork-artist">{artwork.artist}</p>
+                  <p className="artwork-year">{artwork.year}</p>
+                </div>
               </div>
-              <div className="artwork-info">
-                <h3>{artwork.title}</h3>
-                <p className="artwork-artist">{artwork.artist}</p>
-                <p className="artwork-year">{artwork.year}</p>
-              </div>
-            </div>
-          ))}
+            );
+          })}
           
-          {(!selectedGallery.artworks || selectedGallery.artworks.length === 0) && (
+          {!selectedGallery.artworks?.length && (
             <div className="empty-gallery">
               <p>No artworks in this gallery yet.</p>
             </div>
@@ -82,12 +123,11 @@ const Gallery = () => {
     );
   }
 
-  // Main Gallery List View
   return (
     <div className="gallery-container">
       <div className="gallery-header-main">
         <h2>Art Galleries</h2>
-        <p className="gallery-subtitle">Explore curated collections from around the world</p>
+        <p className="gallery-subtitle">Explore curated collections</p>
       </div>
       
       <div className="gallery-controls">
@@ -127,29 +167,45 @@ const Gallery = () => {
           <p>{error}</p>
         </div>
       ) : (
-        <div className={`gallery-list ${viewMode === 'list' ? 'list-view' : 'grid-view'}`}>
+        <div className={`gallery-list ${viewMode}`}>
           {filteredGalleries.length > 0 ? (
-            filteredGalleries.map((gallery, index) => (
-              <div 
-                key={index} 
-                className="gallery-item"
-                onClick={() => handleGalleryClick(gallery)}
-              >
-                <div className="gallery-item-image">
-                  <img 
-                    src={gallery.coverImage || 'https://via.placeholder.com/400x300?text=Gallery'} 
-                    alt={gallery.name}
-                  />
+            filteredGalleries.map((gallery) => {
+              const coverImageUrl = getImageUrl(gallery.coverImage);
+              const galleryKey = `gallery-${gallery._id}`;
+
+              return (
+                <div 
+                  key={gallery._id}
+                  className="gallery-item"
+                  onClick={() => handleGalleryClick(gallery)}
+                >
+                  <div className="gallery-item-image">
+                    {!imageErrors[galleryKey] ? (
+                      <img 
+                        src={coverImageUrl}
+                        alt={gallery.name}
+                        onError={() => handleImageError(coverImageUrl, galleryKey)}
+                        crossOrigin="anonymous"
+                      />
+                    ) : (
+                      <div className="image-placeholder">
+                        <div className="placeholder-icon">🏛️</div>
+                        <p>{gallery.name}</p>
+                      </div>
+                    )}
+                  </div>
+                  <div className="gallery-item-content">
+                    <h3>{gallery.name}</h3>
+                    <p className="gallery-description">{gallery.description}</p>
+                    {gallery.artworks?.length > 0 && (
+                      <span className="artwork-count">
+                        {gallery.artworks.length} artwork{gallery.artworks.length !== 1 ? 's' : ''}
+                      </span>
+                    )}
+                  </div>
                 </div>
-                <div className="gallery-item-content">
-                  <h3>{gallery.name}</h3>
-                  <p>{gallery.description}</p>
-                  {gallery.artworkCount && (
-                    <span className="artwork-count">{gallery.artworkCount} artworks</span>
-                  )}
-                </div>
-              </div>
-            ))
+              );
+            })
           ) : (
             <div className="no-results">
               <p>No galleries found matching your search.</p>

@@ -31,6 +31,7 @@ const Login = () => {
       return;
     }
     
+    
     // Here you would typically make an API call to authenticate the user
     console.log('Login attempt:', formData);
     
